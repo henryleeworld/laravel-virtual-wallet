@@ -1,17 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Bavix\Wallet\Interfaces\Wallet;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements Wallet
+class User extends Authenticatable
 {
-    use Notifiable, HasWallet, HasWallets;
+    use HasFactory, Notifiable, HasWallet, HasWallets;
 
     /**
      * The attributes that are mass assignable.
