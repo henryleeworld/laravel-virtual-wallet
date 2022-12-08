@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +13,4 @@ use App\Http\Controllers\WalletController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/wallet', [WalletController::class, 'index']);

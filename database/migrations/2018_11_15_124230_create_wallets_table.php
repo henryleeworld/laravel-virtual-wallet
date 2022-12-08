@@ -1,72 +1,65 @@
 <?php
 
+declare(strict_types=1);
+
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWalletsTable extends Migration
-{
-
-    /**
-     * @return string
-     */
-    protected function table(): string
-    {
-        return (new Wallet())->getTable();
-    }
-
-    /**
-     * @return void
-     */
+return new class() extends Migration {
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('holder');
             $table->string('name');
-            $table->string('slug')->index();
-            $table->string('description')->nullable();
-            $table->decimal('balance', 64, 0)->default(0);
+            $table->string('slug')
+                ->index()
+            ;
+            $table->uuid('uuid')
+                ->unique()
+            ;
+            $table->string('description')
+                ->nullable()
+            ;
+            $table->json('meta')
+                ->nullable()
+            ;
+            $table->decimal('balance', 64, 0)
+                ->default(0)
+            ;
+            $table->unsignedSmallInteger('decimal_places')
+                ->default(2)
+            ;
             $table->timestamps();
 
             $table->unique(['holder_type', 'holder_id', 'slug']);
         });
 
-        /**
-         * migrate v1 to v2
-         */
-        $default = config('wallet.wallet.default.name', 'Default Wallet');
-        $slug = config('wallet.wallet.default.slug', 'default');
-        $now = time();
-        $query = Transaction::query()->distinct()
-            ->selectRaw('payable_type as holder_type')
-            ->selectRaw('payable_id as holder_id')
-            ->selectRaw('? as name', [$default])
-            ->selectRaw('? as slug', [$slug])
-            ->selectRaw('sum(amount) as balance')
-            ->selectRaw('? as created_at', [$now])
-            ->selectRaw('? as updated_at', [$now])
-            ->groupBy('holder_type', 'holder_id')
-            ->orderBy('holder_type');
-
-        DB::transaction(function () use ($query) {
-            $query->chunk(1000, function (Collection $transactions) {
-                DB::table((new Wallet())->getTable())
-                    ->insert($transactions->toArray());
-            });
+        Schema::table($this->transactionTable(), function (Blueprint $table) {
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on($this->table())
+                ->onDelete('cascade')
+            ;
         });
     }
 
-    /**
-     * @return void
-     */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::drop($this->table());
     }
 
-}
+    protected function table(): string
+    {
+        return (new Wallet())->getTable();
+    }
+
+    private function transactionTable(): string
+    {
+        return (new Transaction())->getTable();
+    }
+};

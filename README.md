@@ -1,4 +1,4 @@
-# Laravel 8 虛擬錢包
+# Laravel 9 虛擬錢包
 
 引入 bavix 的 laravel-wallet 套件來擴增讓一個虛擬口袋進行金額提領等交易，也能透過這個錢包將錢轉儲到另外一個，例如分成花費、保留、儲蓄成長 3 個不同虛擬口袋，確保帳戶間計算結算的正確性。
 
@@ -26,5 +26,5 @@ $ php artisan migrate --seed
 ----
 
 ## 畫面截圖
-![](https://i.imgur.com/bR6QPcm.png)
+![](https://i.imgur.com/rBC315L.png)
 > 查看錢包內餘額跟使用錢包轉帳功能
