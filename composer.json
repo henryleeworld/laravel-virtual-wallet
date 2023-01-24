@@ -8,13 +8,13 @@
         "php": "^8.0.2",
         "bavix/laravel-wallet": "^9.6",
         "guzzlehttp/guzzle": "^7.4",
-        "laravel/framework": "^9.47",
+        "laravel/framework": "^9.48",
         "laravel/sanctum": "^2.15.1",
         "laravel/tinker": "^2.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.21.0",
-        "laravel/sail": "^1.18.0",
+        "laravel/sail": "^1.18.1",
         "mockery/mockery": "^1.5.1",
         "nunomaduro/collision": "^6.4",
         "phpunit/phpunit": "^9.5.26",
