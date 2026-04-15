@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,7 +30,7 @@ return new class extends Migration
 
         Wallet::query()->chunk(10000, static function (Collection $wallets) {
             $wallets->each(function (Wallet $wallet) {
-                $wallet->uuid = app(UuidFactoryServiceInterface::class)->uuid4();
+                $wallet->uuid = app(IdentifierFactoryServiceInterface::class)->generate();
                 $wallet->save();
             });
         });
@@ -46,7 +46,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropColumns($this->table(), ['uuid']);
+        Schema::table($this->table(), function (Blueprint $table) {
+            if (Schema::hasColumn($this->table(), 'uuid')) {
+                $table->dropIndex('wallets_uuid_unique');
+                $table->dropColumn('uuid');
+            }
+        });
     }
 
     private function table(): string

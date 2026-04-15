@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create($this->table(), static function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->morphs('holder');
             $table->string('name');
             $table->string('slug')
@@ -50,7 +50,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::drop($this->table());
+        Schema::dropIfExists($this->table());
     }
 
     private function table(): string

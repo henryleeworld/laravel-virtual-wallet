@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create($this->table(), static function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->morphs('payable');
             $table->unsignedBigInteger('wallet_id');
             $table->enum('type', ['deposit', 'withdraw'])->index();
@@ -39,7 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop($this->table());
+        Schema::dropIfExists($this->table());
     }
 
     private function table(): string

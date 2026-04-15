@@ -6,6 +6,9 @@ use App\Models\User;
 
 class WalletController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $user = User::find(1);
